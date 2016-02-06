@@ -1,7 +1,7 @@
 # http://www.gnu.org/software/automake
 
 Makefile.in
-
+/Makefile
 # http://www.gnu.org/software/autoconf
 
 /autom4te.cache
@@ -9,8 +9,9 @@ Makefile.in
 /autoscan-*.log
 /aclocal.m4
 /compile
-/config.h.in
+/config.*
 /configure
+/configure.ac
 /configure.scan
 /depcomp
 /install-sh
