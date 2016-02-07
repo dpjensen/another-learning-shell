@@ -50,3 +50,6 @@ Makefile.in
 
 # Debug files
 *.dSYM/
+
+#vim
+*.swp
