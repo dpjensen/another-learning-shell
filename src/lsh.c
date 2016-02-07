@@ -1,7 +1,10 @@
 #include "exec.h"
 #include "common.h"
 
-char ** tokenizeArgs(int inLen, char* buffer){
+/*
+ * take the char buffer, return string array
+ */
+char **tokenizeArgs(int inLen, char* buffer){
 
 
     //we can't have a token array
@@ -61,50 +64,6 @@ int readline(char ** linebuf){
     return readin;
 
 }
-/*
- * Two builtin functions for cd
- * and exit
- */
-int builtin_cd(char ** cmd){
-    printf("CD: %s\n", cmd[1]);
-    if(cmd[1] == NULL){
-        return 1;
-    }else{
-        chdir(cmd[1]);
-    }
-
-    return 1;
-}
-
-int builtin_exit(){
-    return 0;
-}
-
-
-/*
- * Job control and execution will start here
- */
-int lineExecJob(char**cmd){
-
-
-}
-
-
-/*
- * check to see if you're running a builtin,
- * or sending something to exec
- */
-int parseLine( char** cmd){
-
-    if(strcmp(cmd[0], "exit") == 0){
-        return builtin_exit();
-    }else if(strcmp(cmd[0], "cd") == 0){
-        return builtin_cd(cmd);
-    }
-
-    return lineExecJob(cmd);
-
-}
 
 
 /*
@@ -113,6 +72,7 @@ int parseLine( char** cmd){
  */
 void shRunLoop(){
 
+    //TODO: we still need to init SIG
     int status = 1;
     int charCount;
     char *line = NULL;
@@ -141,6 +101,5 @@ void shRunLoop(){
 int main(int argc, char **argv){
 
     //perform init functions for job control
-    initShell();
     shRunLoop();
 }

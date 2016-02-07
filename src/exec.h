@@ -1,39 +1,21 @@
-
+#pragma once
+#include "common.h"
 #define _GNU_SOURCE
 
-int initShell();
-int lineExecJob(char**cmd);
+#define NUM_BUILTINS 3
 
-pid_t shellPid;
-int shell_terminal = STDIN_FILENO;
-/*
- * This will track a single process in use by a job
- */
-typedef struct process{
-    struct process *next;   //next in LL
-    char **argv;            //Our string array of args
-    pid_t pid;              //process ID
-    char completed;         //if process has completed
-    char stopped;           //if process has been stopped
-    int status;             //reported status
-}process;
-
+void initBuiltins();
+int32_t parseLine(char **args);
 
 
 /*
- *This is a linked list of jobs,
- *we keep track of ids, states, and processes
+ * This struct 
+ * is for our builtin functions
  */
-typedef struct job{
-    struct job *next; //next in ll
-    char *command; //string of actual cmd, for messages
-    process *first_process; //proc used by the job
-    pid_t pigd;     //process group id
-    char notifed;   //for notifcation status
-    struct termios tmode; //for saved terminal modes
-    int stdin, stdout, stderr; //io FDs, if needed
+ struct builtin{
 
-}job;
-//beginning of our LL
-job job_head = NULL;
+    char *builtinStr;
+    int(*builtinPtr)(char**);
+
+};
 

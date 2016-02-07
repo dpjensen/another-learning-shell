@@ -1,10 +1,12 @@
-
+#pragma once
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <termios.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h>
 
+#include <stdint.h>
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
