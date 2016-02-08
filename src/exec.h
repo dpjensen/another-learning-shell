@@ -5,7 +5,7 @@
 #define NUM_BUILTINS 3
 
 void initBuiltins();
-int32_t parseLine(char **args);
+int32_t parseLine(char **args, int isBackground);
 
 
 /*

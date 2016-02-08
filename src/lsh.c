@@ -18,8 +18,10 @@ char **tokenizeArgs(int inLen, char* buffer){
         //tokens[pos] = calloc(toksize, sizeof(char));
         //so here we're goning to have to use strcpy
         //strcpy(tokens[pos], token);
-        tokens[pos] = token;
-        pos++;
+        if(strcmp(token, "&") != 0){
+            tokens[pos] = token;
+            pos++;
+        }
 
         token = strtok(NULL, " ");
         
@@ -65,6 +67,25 @@ int readline(char ** linebuf){
 
 }
 
+/*
+ * very short function to get a flag for a
+ * background process
+ */
+int isBackground(char *line, int len){
+
+    char lastChar = line[len-2];
+    printf("test: %c\n", line[0]);
+    printf("Last Char: %c in len %i\n", lastChar, len);
+
+    if(strcmp(&line[len-2], "&")== 0){
+        printf("Background\n");
+        return 1;
+    }else{
+        return 0;
+    }
+
+
+}
 
 /*
  * Our main run loop.
@@ -75,14 +96,17 @@ void shRunLoop(){
     //TODO: we still need to init SIG
     int status = 1;
     int charCount;
+    int bg;
     char *line = NULL;
     char **args;
     do{
         printf("->");
         charCount = readline(&line);
+
+        bg = isBackground(line, charCount);
         args = tokenizeArgs(charCount, line);
         printf("-%s-\n", args[0]);
-        status = parseLine(args);
+        status = parseLine(args, bg);
 
         free(args);
         free(line);

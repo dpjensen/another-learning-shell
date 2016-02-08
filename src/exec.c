@@ -16,7 +16,7 @@ struct builtin builtinList[NUM_BUILTINS] = {
  * Job control and execution will start here,
  * after we go through builtin process
  */
-int lineExecJob(char**cmd){
+int lineExecJob(char**cmd, int isBackground){
    
     pid_t childPid;
     childPid =  fork();
@@ -31,9 +31,13 @@ int lineExecJob(char**cmd){
         perror("Could not fork");
     }else{
         //parent
-        do{
-            waitpid(childPid, &status, WUNTRACED);
-        }while(!WIFEXITED(status) && WIFSIGNALED(status));
+        if(isBackground == 0){ 
+            do{//only wait if we're not running as background
+                waitpid(childPid, &status, WUNTRACED);
+
+            //this is how we check for status: exit or sig from child
+            }while(!WIFEXITED(status) && !WIFSIGNALED(status));
+        }
     }
 
 
@@ -70,7 +74,7 @@ int builtinHistory(){
  * check to see if you're running a builtin,
  * or sending something to exec
  */
-int parseLine( char** cmd){
+int parseLine( char** cmd, int isBackground){
 
     for(int32_t i = 0; i < NUM_BUILTINS; i++){
         if(strcmp(cmd[0], builtinList[i].builtinStr)==0){
@@ -78,6 +82,6 @@ int parseLine( char** cmd){
         }
     }
 
-    return lineExecJob(cmd);
+    return lineExecJob(cmd, isBackground);
 
 }
