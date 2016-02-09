@@ -38,7 +38,9 @@ void shRunLoop(){
     //TODO: we still need to init SIG
     initHist(); 
   
-    //the parent shell will ignore sigs
+    /*the parent shell will ignore sigs
+     *These will be set back to default in the child
+    */
     signal (SIGINT, SIG_IGN);
     signal (SIGQUIT, SIG_IGN);
     signal (SIGTSTP, SIG_IGN);
@@ -62,6 +64,7 @@ void shRunLoop(){
         args = tokenizeArgs(charCount, line);
         //printf("-%s-\n", args[0]);
 
+        //we don't wanna process a newline
         if(charCount != 1){
             status = parseLine(args, bg);
         }

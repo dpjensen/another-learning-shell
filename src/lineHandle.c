@@ -2,7 +2,7 @@
 
 /*
  * A small set of functions 
- * for handling manipulation of line inputs for the shell
+ * for handling, manipulation of line inputs for the shell
  */
 
 
@@ -12,6 +12,9 @@
  * get rid of newline, and tokenize
  *
  * getline() is a POSIX extension in C
+ *
+ * ARGS:
+ *      pointer to character array
  *
  * RETURNS: Num of characters read in
  */
@@ -48,6 +51,10 @@ int readline(char ** linebuf){
 /*
  * take the char buffer, return string array
  *
+ * ARGS:
+ *      length of chars in array
+ *      char array
+ *
  * RETURNS: string array of args to run
  */
 char **tokenizeArgs(int inLen, char* buffer){
@@ -71,7 +78,6 @@ char **tokenizeArgs(int inLen, char* buffer){
         
     }
     tokens[pos] = NULL;
-    //free(buffer);
 
 
     return tokens;

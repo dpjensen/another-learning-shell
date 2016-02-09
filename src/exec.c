@@ -1,6 +1,12 @@
 #include "exec.h"
 #include "history.h"
 #include "lineHandle.h"
+
+/*
+ * What follows is our functions defs and struct used for builtins
+ * builtins are held in array of structs, corrisponding to the string + func pointer
+ *
+ */
 int builtinCd(char **args);
 int builtinExit();
 int builtinHistory();
@@ -15,9 +21,18 @@ struct builtin builtinList[NUM_BUILTINS] = {
     { .builtinStr = "!!",       .builtinPtr = &builtinRunHist}
 
 };
+
+
 /*
  * Job control and execution will start here,
  * after we go through builtin process
+ *
+ * ARGS:
+ *      string array of commands, passed to exec
+ *      bool, if job is background
+ *
+ * RETURN: 1 for success
+ *      
  */
 int lineExecJob(char**cmd, int isBackground){
    
@@ -59,10 +74,15 @@ int lineExecJob(char**cmd, int isBackground){
 
 
 /*
- * Two builtin functions for cd
- * and exit
+ * handful of builtin functions
+ *
  */
 
+
+/*
+ * Handles commands to run from history
+ *
+ */
 int builtinRunHist(char **args){
 
     if(histCount == 1){
@@ -70,10 +90,6 @@ int builtinRunHist(char **args){
         return 1;
     }
 
-    //look to see what kind of history command we're running
-    if(strcmp(args[0], "!!")==0){
-        printf("Running last cmd\n");
-    }
 
     if( (args[1] == NULL) && (strcmp(args[0], "!!") != 0) ){
         printf("Enter a number from the history file, with spaces\n");
@@ -93,6 +109,9 @@ int builtinRunHist(char **args){
             return 1;
         }
     }else{
+        //this is for !!
+        //if we didn't deincrement histCount,
+        //we would just run in a infinate loop. And that's terrible.
         toRun = histCount -1;
     }
     lineCount = getHistItem(toRun, &cmdLine);
@@ -139,6 +158,14 @@ int builtinHistory(){
 /*
  * check to see if you're running a builtin,
  * or sending something to exec
+ *
+ * ARGS:
+ *      string array of commands
+ *      bool, if cmd is running in background
+ *
+ * RETURNS:
+ *      1 on normal process, 0 to exit shell    
+ *  
  */
 int parseLine( char** cmd, int isBackground){
 

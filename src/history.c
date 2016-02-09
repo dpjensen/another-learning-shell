@@ -5,7 +5,7 @@
 
 
 /*
- * We just close our file stream
+ * We just need to close our file stream
  */
 void closeHist(){
    fclose(histFile); 
@@ -13,7 +13,10 @@ void closeHist(){
 
 
 /*
- * build our file path and open the file for use
+ * build our file path and open the file for use,
+ * and get the last count from history
+ * We track the number of commands entered 
+ * by getting the last number in the file
  */
 void initHist(){
     char *homeDir =  getenv("HOME");
@@ -35,12 +38,9 @@ void initHist(){
         while( (c = fgetc(histFile)) != '\n'){
             fseek(histFile, -2, SEEK_CUR);
         }
-        //one more to absorb newline
-        //fseek(histFile,1,SEEK_CUR);
         char *numString = calloc(20, sizeof(char));
         //we just want the first few characters to get an integer value.
         fgets(numString, 20, histFile);
-        //printf("Got last line at pos %ld \n", ftell(histFile));
         //now we have our position, turn to int
         int hist;
         int match = sscanf(numString, "%d:", &hist);
@@ -52,6 +52,7 @@ void initHist(){
             histCount = hist;
         }
     }else{
+        //no history file
         histCount = 0;
     }
 
@@ -60,6 +61,9 @@ void initHist(){
 
 /*
  * Appends a command to the end of the history file
+ *  
+ * ARGS:
+ *      string to write to history
  */
 void writeHist(char * line){
     //get to end of file
@@ -75,6 +79,12 @@ void writeHist(char * line){
 
 /*
  * Takes a position in the history list, and return string
+ *
+ * ARGS:
+ *      position in the hist file (beginning: 1), pointer to buffer to write to
+ *
+ * RETURNS:
+ *      number of characters read
  */
 
 int getHistItem(int pos, char **buffer){
