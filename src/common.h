@@ -1,3 +1,4 @@
+//we're hip and modern C programmers, so we're using #pragma
 #pragma once
 #define _GNU_SOURCE
 #include <unistd.h>

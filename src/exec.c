@@ -1,15 +1,18 @@
 #include "exec.h"
-
-
+#include "history.h"
+#include "lineHandle.h"
 int builtinCd(char **args);
 int builtinExit();
 int builtinHistory();
+int builtinRunHist(char **args);
 
 struct builtin builtinList[NUM_BUILTINS] = {
 
-    { .builtinStr = "cd", .builtinPtr = &builtinCd},
-    { .builtinStr = "exit", .builtinPtr = &builtinExit},
-    { .builtinStr = "history", .builtinPtr = &builtinHistory}
+    { .builtinStr = "cd",       .builtinPtr = &builtinCd},
+    { .builtinStr = "exit",     .builtinPtr = &builtinExit},
+    { .builtinStr = "history",  .builtinPtr = &builtinHistory},
+    { .builtinStr = "!",        .builtinPtr = &builtinRunHist},
+    { .builtinStr = "!!",       .builtinPtr = &builtinRunHist}
 
 };
 /*
@@ -22,7 +25,16 @@ int lineExecJob(char**cmd, int isBackground){
     childPid =  fork();
     int status;
 
-    if(childPid == 0){
+    if(childPid == 0){ //child proc
+
+        //reset those signals we ignored earlier
+        signal (SIGINT, SIG_DFL);
+        signal (SIGQUIT, SIG_DFL);
+        signal (SIGTSTP, SIG_DFL);
+        signal (SIGTTIN, SIG_DFL);
+        signal (SIGTTOU, SIG_DFL);
+        signal (SIGCHLD, SIG_DFL);
+
         if(execvp(cmd[0], cmd) == -1){
             perror("Could not run command");
         }
@@ -50,6 +62,60 @@ int lineExecJob(char**cmd, int isBackground){
  * Two builtin functions for cd
  * and exit
  */
+
+int builtinRunHist(char **args){
+
+    if(histCount == 1){
+        printf("No History to run!\n");
+        return 1;
+    }
+
+    //look to see what kind of history command we're running
+    if(strcmp(args[0], "!!")==0){
+        printf("Running last cmd\n");
+    }
+
+    if( (args[1] == NULL) && (strcmp(args[0], "!!") != 0) ){
+        printf("Enter a number from the history file, with spaces\n");
+        return 1;
+    }
+    //process history count number, and run
+    int toRun;
+    char *cmdLine;
+    char **histArgs;
+    char **runArgs;
+    int lineCount;
+
+    if(args[1] != NULL){
+        sscanf(args[1], "%d", &toRun);
+        if(toRun > histCount){
+            printf("Invalid history count.\n");
+            return 1;
+        }
+    }else{
+        toRun = histCount -1;
+    }
+    lineCount = getHistItem(toRun, &cmdLine);
+    //remove any trailing newline
+    cmdLine[strcspn(cmdLine, "\n")] = 0;
+    
+    histArgs = tokenizeArgs(lineCount, cmdLine);
+
+    if((strcmp(histArgs[1], "!!") == 0)){
+        printf("Saved from infinate loop.\n");
+        free(histArgs);
+        free(cmdLine);
+        return 1;
+    }
+
+    //our super hacky way of getting rid of the history number
+    runArgs = histArgs +1;
+    parseLine(runArgs, 0);
+   
+    free(histArgs);
+    free(cmdLine);
+    return 1;
+}
 int builtinCd(char ** cmd){
     printf("CD: %s\n", cmd[1]);
     if(cmd[1] == NULL){
@@ -66,7 +132,7 @@ int builtinExit(){
 }
 
 int builtinHistory(){
-
+    printHist();
     return 1;
 }
 
