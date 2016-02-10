@@ -11,7 +11,6 @@ Makefile.in
 /compile
 /config.*
 /configure
-/configure.ac
 /configure.scan
 /depcomp
 /install-sh
