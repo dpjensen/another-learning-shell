@@ -6,6 +6,8 @@
 /*
  * A learning shell that performs basic functions
  * Execution, background, and history
+ *
+ * Job execution is very stripped down, and will be expanded with time
  */
 
 
@@ -40,6 +42,13 @@ int isHistCmd(char * line){
 /*
  * very short function to get a flag for a
  * background process
+ *
+ * ARGS:
+ *      User command string
+ *      length of string
+ * RETURNS:
+ *      1 for bg proc, 0 otherwise
+ *
  */
 int isBackground(char *line, int len){
 
@@ -82,6 +91,16 @@ void shRunLoop(){
     int bg;
     char *line = NULL;
     char **args;
+    /*
+     * The process:
+     *
+     * print prompt (->)
+     * Read line from stdin
+     * write to history
+     * check if running in the bg
+     * tokenize user string, for exec
+     * send array to be executed
+     */
     do{
         printf("->");
         charCount = readline(&line);

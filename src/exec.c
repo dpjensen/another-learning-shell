@@ -133,6 +133,8 @@ int builtinRunHist(char **args){
     free(cmdLine);
     return 1;
 }
+
+
 int builtinCd(char ** cmd){
     printf("CD: %s\n", cmd[1]);
     if(cmd[1] == NULL){
