@@ -14,6 +14,16 @@ Until then, hopefully it may help others who are doing this for a class assignme
 make
 ```
 
+#Running, exiting
+
+```shell
+./shell/lsh
+
+->exit
+```
+
+
+
 ##TODO:
 * Implement POSIX-compliant job control, and shell initiialization, using process groups and tcsetpgrp()
 * Don't put history commands in the history file
