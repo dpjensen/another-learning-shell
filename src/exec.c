@@ -110,9 +110,7 @@ int builtinRunHist(char **args){
         }
     }else{
         //this is for !!
-        //if we didn't deincrement histCount,
-        //we would just run in a infinate loop. And that's terrible.
-        toRun = histCount -1;
+        toRun = histCount;
     }
     lineCount = getHistItem(toRun, &cmdLine);
     //remove any trailing newline

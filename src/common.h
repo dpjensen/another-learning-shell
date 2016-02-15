@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include <ctype.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <errno.h>

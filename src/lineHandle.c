@@ -19,7 +19,7 @@
  * RETURNS: Num of characters read in
  */
 int readline(char ** linebuf){
-    char *buffer;
+    char *buffer = NULL;
     ssize_t readin;
     size_t readLn = 0;
     

@@ -10,6 +10,33 @@
 
 
 
+
+/*
+ * Quick and dirty, to check for a history command
+ *
+ * ARGS:
+ *      line from user input
+ *
+ * RETURNS:
+ *      1 for history || (!) cmd, 0 otherwise
+ */
+
+int isHistCmd(char * line){
+
+    //we wanna trim whitespace before we do this
+    while(isspace(*line)){
+        line++;
+    }
+    
+    if(line[0] == '!'){
+        return 1;
+    }else{
+        return 0;
+    }
+
+}
+
+
 /*
  * very short function to get a flag for a
  * background process
@@ -58,8 +85,11 @@ void shRunLoop(){
     do{
         printf("->");
         charCount = readline(&line);
-
-        writeHist(line);
+        
+        if(isHistCmd(line) == 0){
+            writeHist(line);
+        }
+        
         bg = isBackground(line, charCount);
         args = tokenizeArgs(charCount, line);
         //printf("-%s-\n", args[0]);
