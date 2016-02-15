@@ -17,7 +17,7 @@ make
 ##Running, exiting
 
 ```shell
-./shell/lsh
+./src/lsh
 
 ->exit
 ```
