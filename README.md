@@ -14,7 +14,7 @@ Until then, hopefully it may help others who are doing this for a class assignme
 make
 ```
 
-#Running, exiting
+##Running, exiting
 
 ```shell
 ./shell/lsh
