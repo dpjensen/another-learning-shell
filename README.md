@@ -7,10 +7,12 @@ in a fashon more in line with modern shells such as zsh.
 Until then, hopefully it may help others who are doing this for a class assignment, such as myself.
 
 ##Building:
+
+```shell
 ./autogen.sh
 ./configure
 make
-
+```
 
 ##TODO:
 * Implement POSIX-compliant job control, and shell initiialization, using process groups and tcsetpgrp()
