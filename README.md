@@ -1,7 +1,15 @@
-##Building:
+#->lsh
+##A learning shell
+This is a simple, stripped-down learning shell that impliments history and a few shell builtins
+It aims to be well-documented, and with time the shell will impliment job control and buildin features
+in a fashon more in line with modern shells such as zsh.
 
-$./configure
-$make
+Until then, hopefully it may help others who are doing this for a class assignment, such as myself.
+
+##Building:
+./autogen.sh
+./configure
+make
 
 
 ##TODO:
